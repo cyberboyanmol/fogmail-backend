@@ -4,7 +4,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node -r  ./tsconfig-paths.js   ./dist/server.js",
+    "dev": "cross-env NODE_ENV=development tsx watch ./src/server.ts ",
+    "build": "yarn clean &&  tsc ",
+    "clean": "rimraf dist/",
+    "format": "prettier --write \"./**/*.{js,ts,json}\"",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint  src/**/*.ts --fix"
+  },
   "dependencies": {
+    "@prisma/client": "^5.18.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
@@ -14,6 +24,8 @@
     "http-status": "^1.7.4",
     "ioredis": "^5.4.1",
     "joi": "^17.13.3",
+    "morgan": "^1.10.0",
+    "prisma": "^5.18.0",
     "tsconfig-paths": "^4.2.0",
     "validator": "^13.12.0",
     "winston": "^3.13.1"

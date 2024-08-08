@@ -8,6 +8,8 @@ import { getConfig } from '@/config';
 import { globalConstants } from '@/utils';
 import logger from '@/lib/logger';
 import morgan from '@/lib/morgan';
+import LoggerFactory from './lib/new-logger';
+import { errorConverter, errorMiddleware } from './middlewares/error.middleware';
 
 export class App {
   public app: express.Application;
@@ -16,7 +18,7 @@ export class App {
   public env: string;
   public server: Server;
   public protocol: string;
-
+  public logger = LoggerFactory.createLogger('Express Application');
   constructor(routes: Route[]) {
     this.config = getConfig();
     this.app = express();
@@ -27,6 +29,7 @@ export class App {
     this.initializeMiddleware();
     this.initializeRoutes(routes);
     this.initializeRouteFallback();
+    this.initializeErrorHandling();
     this.disableSettings();
   }
 
@@ -69,10 +72,16 @@ export class App {
       });
     });
   }
+  private initializeErrorHandling() {
+    this.app.use(errorConverter);
+    this.app.use(errorMiddleware);
+  }
 
   public listen() {
     this.app.listen(this.port, () => {
-      logger.info(`🚀 Server listening on ${this.config.server.protocol}://${this.config.server.host}:${this.port}`);
+      this.logger.info(
+        `🚀 Server listening on ${this.config.server.protocol}://${this.config.server.host}:${this.port}`,
+      );
     });
   }
 

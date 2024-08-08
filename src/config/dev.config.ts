@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import { Config } from '@/interfaces';
+import LoggerFactory from '@/lib/new-logger';
 dotenv.config({ path: __dirname + `/../../.env.${process.env.NODE_ENV}` });
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
-
 export const devConfig: Config = {
   NODE_ENV: String(process.env.NODE_ENV || 'development'),
   POSTGRESQL_DB_URL: String(process.env.POSTGRESQL_DB_URL),
