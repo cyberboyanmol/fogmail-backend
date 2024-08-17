@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_DB_URL")
+}
+
+model EmailInbox {
+  id            String         @id @default(uuid())
+  username      String         @unique
+  conversations Conversation[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([username])
+}
+
+model Conversation {
+  id            String     @id @default(uuid())
+  emailInbox    EmailInbox @relation(fields: [emailusername], references: [username])
+  emailusername String
+  threadId      String     @unique
+  subject       String
+  messages      Message[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([emailusername])
+  @@index([threadId])
+  @@index([subject])
+}
+
+model Message {
+  id             String        @id @default(uuid())
+  conversation   Conversation  @relation(fields: [conversationId], references: [threadId])
+  conversationId String
+  messageId      String        @unique
+  fromAddress    Address       @relation("MessageFrom", fields: [fromAddressId], references: [id])
+  fromAddressId  String
+  subject        String
+  rawMail        String
+  size           Int
+  headers        String
+  text           String?
+  textAsHtml     String?
+  html           String?
+  inReplyTo      String?
+  references     String[]
+  date           DateTime
+  status         MessageStatus @default(UNREAD)
+  ccList         Address[]     @relation("MessageCC")
+  bccList        Address[]     @relation("MessageBCC")
+  toList         Address[]     @relation("MessageTo")
+  attachments    Attachment[]
+  headerLines    Header[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([conversationId, date])
+  @@index([messageId])
+  @@index([fromAddressId])
+}
+
+model Address {
+  id           String    @id @default(uuid())
+  name         String    @default("")
+  address      String    @unique
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  fromMessages Message[] @relation("MessageFrom")
+  ccMessages   Message[] @relation("MessageCC")
+  bccMessages  Message[] @relation("MessageBCC")
+  toMessages   Message[] @relation("MessageTo")
+
+  @@index([address])
+}
+
+model Attachment {
+  id                 String   @id @default(uuid())
+  message            Message  @relation(fields: [messageId], references: [messageId])
+  messageId          String
+  contentType        String
+  contentDisposition String
+  fileName           String
+  cid                String   @unique
+  checksum           String
+  size               Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([messageId])
+}
+
+model Header {
+  id        String  @id @default(uuid())
+  key       String
+  value     String
+  Message   Message @relation(fields: [messageId], references: [messageId])
+  messageId String
+
+  @@index([messageId])
+}
+
+enum MessageStatus {
+  READ
+  UNREAD
+}
