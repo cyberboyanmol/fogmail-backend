@@ -14,6 +14,6 @@ export class InboxRoute implements Route {
     this.logger.info('Inbox Module initialized');
   }
   private initializeRoutes() {
-    this.router.get(`${this.path}`, this.inboxController.InboxHandler);
+    this.router.post(`${this.path}`, this.inboxController.getOrCreateInbox);
   }
 }

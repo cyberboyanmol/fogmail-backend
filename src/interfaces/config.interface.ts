@@ -16,6 +16,7 @@ export interface Config {
     format: 'combined' | 'common' | 'dev' | 'short' | 'tiny';
     level: 'error' | 'warn' | 'info' | 'http' | 'debug';
   };
-  allowedOrigins: Array<string> | undefined;
+  allowedOrigins: Array<string>;
+  DOMAIN_LISTS: Array<string>;
   isDev: () => boolean;
 }

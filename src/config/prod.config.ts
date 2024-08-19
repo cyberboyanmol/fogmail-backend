@@ -1,7 +1,8 @@
 import { Config } from '@/interfaces';
 import dotenv from 'dotenv';
 dotenv.config({ path: __dirname + `/../../.env.${process.env.NODE_ENV}` });
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? JSON.parse(process.env.ALLOWED_ORIGINS.replace(/'/g, '"')) : [];
+const DOMAIN_LISTS = process.env.DOMAIN_LISTS ? JSON.parse(process.env.DOMAIN_LISTS.replace(/'/g, '"')) : [];
 export const prodConfig: Config = {
   NODE_ENV: String(process.env.NODE_ENV || 'production'),
   POSTGRESQL_DB_URL: String(process.env.POSTGRESQL_DB_URL),
@@ -20,7 +21,7 @@ export const prodConfig: Config = {
     level: 'info',
   },
   allowedOrigins: allowedOrigins,
-
+  DOMAIN_LISTS,
   isDev: function () {
     return this.NODE_ENV === 'development';
   },

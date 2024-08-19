@@ -1,24 +1,23 @@
 import { RedisRepositoryInterface } from './redis.interface';
 import { Redis } from 'ioredis';
+
 export class RedisService implements RedisRepositoryInterface {
-  private _redisClient: Redis;
-  constructor(redisClient: Redis) {
-    this._redisClient = redisClient;
+  constructor(private readonly redisClient: Redis) {}
+
+  async get<T>(prefix: string, key: string): Promise<T | null> {
+    const value = await this.redisClient.get(`${prefix}:${key}`);
+    return value ? JSON.parse(value) : null;
   }
 
-  async get(prefix: string, key: string): Promise<string | null> {
-    return this._redisClient.get(`${prefix}:${key}`);
-  }
-
-  async set(prefix: string, key: string, value: string): Promise<void> {
-    this._redisClient.set(`${prefix}:${key}`, value);
+  async set(prefix: string, key: string, value: any): Promise<void> {
+    await this.redisClient.set(`${prefix}:${key}`, JSON.stringify(value));
   }
 
   async delete(prefix: string, key: string): Promise<void> {
-    this._redisClient.del(`${prefix}:${key}`);
+    await this.redisClient.del(`${prefix}:${key}`);
   }
 
-  async setWithExpiry(prefix: string, key: string, value: string, expiry: number): Promise<void> {
-    this._redisClient.set(`${prefix}:${key}`, value, 'EX', expiry);
+  async setWithExpiry(prefix: string, key: string, value: any, expiry: number): Promise<void> {
+    await this.redisClient.set(`${prefix}:${key}`, JSON.stringify(value), 'EX', expiry);
   }
 }

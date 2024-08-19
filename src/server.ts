@@ -1,9 +1,10 @@
 import { App } from '@/app';
 import { getConfig } from './config';
-import { HealthCheckRoute } from './modules/healthcheck/controllers/healthcheck.route';
+import { HealthCheckRoute } from './modules/healthcheck/healthcheck.route';
 import LoggerFactory from './lib/new-logger';
+import { InboxRoute } from './modules/inbox/inbox.route';
 
-const app = new App([new HealthCheckRoute()]);
+const app = new App([new HealthCheckRoute(), new InboxRoute()]);
 let server: any;
 const logger = LoggerFactory.createLogger();
 async function startServer() {
@@ -11,6 +12,7 @@ async function startServer() {
     if (getConfig().NODE_ENV) {
       logger.info('Config Module Initialized');
     }
+
     server = app.listen();
   } catch (error) {
     logger.error('Error starting server:', error);
