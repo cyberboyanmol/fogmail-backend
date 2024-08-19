@@ -7,7 +7,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node -r  ./tsconfig-paths.js   ./dist/server.js",
     "dev": "cross-env NODE_ENV=development tsx watch ./src/server.ts ",
-    "build": "yarn clean &&  tsc ",
+    "build": "tsc",
     "clean": "rimraf dist/",
     "format": "prettier --write \"./**/*.{js,ts,json}\"",
     "lint": "eslint src/**/*.ts",
