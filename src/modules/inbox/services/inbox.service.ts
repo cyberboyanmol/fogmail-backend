@@ -1,20 +1,8 @@
 import { InboxRepository } from '@/infra/prisma/repositories/inbox.repository';
 import { RedisService } from '@/infra/redis/redis.service';
+import { InboxData, InboxResult } from '@/interfaces/inbox.interface';
 import { REDIS_ENUM } from '@/utils';
 import crypto from 'crypto';
-
-interface InboxData {
-  username: string;
-  alias: string;
-}
-
-interface InboxResult {
-  inbox: {
-    email: string;
-    alias: string;
-  };
-  isNewInbox: boolean;
-}
 
 export class InboxService {
   constructor(private readonly redisService: RedisService) {}

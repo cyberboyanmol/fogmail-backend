@@ -116,3 +116,5 @@ export enum REDIS_TTL_ENUM {
   FIFTEEN_MINUTES = 900, // 15 minutes
   TWENTY_MINUTES = 1200, // 20 minutes
 }
+
+export const CONVERSATIONS_PAGE_SIZE = 15;

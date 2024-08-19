@@ -11,10 +11,9 @@ export class InboxController extends BaseController {
   private readonly logger = LoggerFactory.createLogger(InboxController.name);
   private readonly inboxService: InboxService;
 
-  constructor() {
+  constructor(private readonly redisService: RedisService) {
     super();
     this.logger.info('Inbox Controller initialized');
-    const redisService = new RedisService(redisdb);
     this.inboxService = new InboxService(redisService);
   }
 

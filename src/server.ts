@@ -3,8 +3,9 @@ import { getConfig } from './config';
 import { HealthCheckRoute } from './modules/healthcheck/healthcheck.route';
 import LoggerFactory from './lib/new-logger';
 import { InboxRoute } from './modules/inbox/inbox.route';
+import { ConversationRoute } from './modules/conversation/conversation.route';
 
-const app = new App([new HealthCheckRoute(), new InboxRoute()]);
+const app = new App([new HealthCheckRoute(), new InboxRoute(), new ConversationRoute()]);
 let server: any;
 const logger = LoggerFactory.createLogger();
 async function startServer() {
