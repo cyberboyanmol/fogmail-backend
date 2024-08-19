@@ -6,6 +6,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS
 export const devConfig: Config = {
   NODE_ENV: String(process.env.NODE_ENV || 'development'),
   POSTGRESQL_DB_URL: String(process.env.POSTGRESQL_DB_URL),
+  REDIS_DB_URL: String(process.env.REDIS_DB_URL),
   REDIS_CACHE_DB_URL: String(process.env.REDIS_CACHE_DB_URL),
   REDIS_STORAGE_DB_URL: String(process.env.REDIS_STORAGE_DB_URL),
   server: {

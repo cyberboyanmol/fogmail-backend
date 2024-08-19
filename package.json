@@ -11,7 +11,12 @@
     "clean": "rimraf dist/",
     "format": "prettier --write \"./**/*.{js,ts,json}\"",
     "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint  src/**/*.ts --fix"
+    "lint:fix": "eslint  src/**/*.ts --fix",
+    "prisma:generate:dev": "npx prisma generate --schema=./src/infra/prisma/schema.prisma ",
+    "prisma:studio:dev": "npx dotenv -e .env.development -- npx prisma studio --schema=./src/infra/prisma/schema.prisma",
+    "prisma:migrate:dev": "npx dotenv -e .env.development -- npx prisma migrate dev --schema=./src/infra/prisma/schema.prisma ",
+    "prisma:migrate:deploy": "npx  dotenv -e .env.production --npx prisma migrate deploy --schema=./src/infra/prisma/schema.prisma ",
+    "prisma:db:reset:dev": "npx dotenv -e .env.production -- npx prisma db push --force-reset && npx prisma db push --schema=./src/infra/prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
@@ -39,6 +44,7 @@
     "@types/morgan": "^1.9.9",
     "@typescript-eslint/eslint-plugin": "^8.0.1",
     "@typescript-eslint/parser": "^8.0.1",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^9.8.0",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",

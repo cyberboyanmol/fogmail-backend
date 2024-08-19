@@ -1,6 +1,7 @@
 export interface Config {
   NODE_ENV: string;
   POSTGRESQL_DB_URL: string;
+  REDIS_DB_URL: string;
   REDIS_CACHE_DB_URL: string;
   REDIS_STORAGE_DB_URL: string;
 

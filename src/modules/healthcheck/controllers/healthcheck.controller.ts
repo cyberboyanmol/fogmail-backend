@@ -4,7 +4,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 export class HealthCheckController {
   private logger = LoggerFactory.createLogger(HealthCheckController.name);
   constructor() {
-    this.logger.info('Controller initialized');
+    this.logger.info('Healthcheck Controller initialized');
   }
   public healthCheck: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
