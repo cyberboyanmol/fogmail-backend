@@ -20,13 +20,13 @@ export class ConversationService {
     const adjustedPageSize = Math.min(pageSize, MAX_PAGE_SIZE);
     const offset = (page - 1) * adjustedPageSize;
 
-    const totalRecords = await this.conversationRepository.count({ emailusername: username });
+    const totalRecords = await this.conversationRepository.count({ username: username });
     const totalPages = Math.ceil(totalRecords / pageSize);
 
     const validPageNumber = page > totalPages ? totalPages : page;
 
     const fetchedConversations = await this.conversationRepository.find(
-      { emailusername: username },
+      { username: username },
       { skip: offset, take: pageSize },
     );
 
@@ -51,11 +51,14 @@ export class ConversationService {
       //     ),
       //   )[0];
 
+      const lastMessage = conversation.messages[conversation.messages.length - 1].date;
+
       return {
         id: conversation.id,
         numMessages,
         numUnreads,
         subject: conversation.subject,
+        lastMessage,
         senders,
         // recipients,
       };
@@ -73,36 +76,12 @@ export class ConversationService {
     };
   }
 
-  //   private transformConversation(conversations: any): ConversationResponse[] {
-  //     return conversations.map((conversation) => {
-  //       const numMessages = conversation.messages.length;
-  //       const numUnreads = conversation.messages.filter((message) => message.status === 'UNREAD').length;
+  public async getConversationById(conversationId: string) {
+    const conversationWithMessage = await this.conversationRepository.findById(conversationId);
+    if (!conversationWithMessage) {
+      throw new ApiError(HttpStatusCode.NOT_FOUND, 'Conversation Not found');
+    }
 
-  //       const senders = Array.from(
-  //         new Set(
-  //           conversation.messages.map((message) =>
-  //             JSON.stringify({
-  //               name: message.fromAddress.name,
-  //               address: message.fromAddress.address,
-  //             }),
-  //           ),
-  //         ),
-  //       ).map((sender) => JSON.parse(sender));
-
-  //       const recipients = conversation.messages.map((message) =>
-  //         Array.from(new Set(message.toList.map((to) => JSON.stringify({ address: to.address, name: to.address })))).map(
-  //           (to) => JSON.parse(to),
-  //         ),
-  //       )[0];
-
-  //       return {
-  //         id: conversation.id,
-  //         numMessages,
-  //         numUnreads,
-  //         subject: conversation.subject,
-  //         senders,
-  //         // recipients,
-  //       };
-  //     });
-  //   }
+    return conversationWithMessage;
+  }
 }

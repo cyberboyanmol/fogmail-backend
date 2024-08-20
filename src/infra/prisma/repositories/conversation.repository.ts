@@ -8,13 +8,13 @@ export class ConversationRepository {
 
   async find(data: Partial<Conversation>, options?: { skip?: number; take?: number }) {
     return this.prisma.conversation.findMany({
-      where: { emailusername: data.emailusername },
+      where: { username: data.username },
       select: {
         subject: true,
         messages: {
           select: {
             fromAddress: true,
-            createdAt: true,
+            date: true,
             status: true,
             toList: true,
           },
@@ -34,7 +34,60 @@ export class ConversationRepository {
 
   async count(data: Partial<Conversation>) {
     return this.prisma.conversation.count({
-      where: { emailusername: data.emailusername },
+      where: { username: data.username },
+    });
+  }
+
+  async findById(conversationId: string) {
+    return this.prisma.conversation.findUnique({
+      where: {
+        id: conversationId,
+      },
+      select: {
+        subject: true,
+        id: true,
+        messages: {
+          select: {
+            fromAddress: {
+              select: {
+                name: true,
+                address: true,
+              },
+            },
+            createdAt: true,
+            status: true,
+            size: true,
+            toList: {
+              select: {
+                name: true,
+                address: true,
+              },
+            },
+            ccList: {
+              select: {
+                name: true,
+                address: true,
+              },
+            },
+            bccList: {
+              select: {
+                name: true,
+                address: true,
+              },
+            },
+            attachments: true,
+            text: true,
+            textAsHtml: true,
+            html: true,
+            inReplyTo: true,
+            references: true,
+            date: true,
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        },
+      },
     });
   }
 }

@@ -5,6 +5,10 @@ import { InboxController } from './inbox.controller';
 import { RedisService } from '@/infra/redis/redis.service';
 import { InboxRepository } from '@/infra/prisma/repositories/inbox.repository';
 import { redisdb } from '@/infra/redis/redis-client';
+import { ConversationController } from '../conversation/conversation.controller';
+import { ConversationRepository } from '@/infra/prisma/repositories/conversation.repository';
+import validate from '@/middlewares/validation.middleware';
+import { inboxConversationDto } from './dtos/inbox-conversation.dto';
 
 export class InboxRoute implements Route {
   public readonly path = '/inbox';
@@ -19,11 +23,16 @@ export class InboxRoute implements Route {
   }
   private initializeRoutes() {
     this.router.post(`${this.path}`, this.inboxController.getOrCreateInbox);
+    this.router.get(
+      `${this.path}/:username/conversations`,
+      validate(inboxConversationDto),
+      this.inboxController.getConversations,
+    );
   }
 
   private createInboxController(): InboxController {
     const redisService = new RedisService(redisdb);
-    // const inboxRepository = new InboxRepository();
-    return new InboxController(redisService);
+    const conversationRepository = new ConversationRepository();
+    return new InboxController(redisService, conversationRepository);
   }
 }

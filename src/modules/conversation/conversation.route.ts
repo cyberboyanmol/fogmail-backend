@@ -7,7 +7,7 @@ import { redisdb } from '@/infra/redis/redis-client';
 import { ConversationController } from './conversation.controller';
 import { ConversationRepository } from '@/infra/prisma/repositories/conversation.repository';
 import validate from '@/middlewares/validation.middleware';
-import { conversationDto } from './dtos/conversation.dto';
+import { ConversationByIdDto } from './dtos/conversation-by-id.dto';
 
 export class ConversationRoute implements Route {
   public readonly path = '/conversations';
@@ -21,7 +21,11 @@ export class ConversationRoute implements Route {
     this.logger.info('Conversation Module initialized');
   }
   private initializeRoutes() {
-    this.router.get(`${this.path}/:username`, validate(conversationDto), this.conversationController.getConversations);
+    this.router.get(
+      `${this.path}/:conversationId/messages`,
+      validate(ConversationByIdDto),
+      this.conversationController.getConversationById,
+    );
   }
 
   private createConversationController(): ConversationController {

@@ -11,8 +11,8 @@ import ApiError from '@/exceptions/http.exception';
 import { ConversationRepository } from '@/infra/prisma/repositories/conversation.repository';
 import { ConversationService } from './conversation.service';
 
-export class ConversationController extends BaseController {
-  private readonly logger = LoggerFactory.createLogger(ConversationController.name);
+export class MessageController extends BaseController {
+  private readonly logger = LoggerFactory.createLogger(MessageController.name);
   private readonly conversationService: ConversationService;
 
   constructor(
@@ -24,11 +24,9 @@ export class ConversationController extends BaseController {
     this.logger.info('Conversation Controller initialized');
   }
 
-  public getConversationById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  public getMessageDetailsById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { conversationId } = req.params;
-      const conversationWithMessage = await this.conversationService.getConversationById(conversationId);
-      this.send(res, { conversation: conversationWithMessage }, 'get conversation with message');
+      const {} = req.query;
     } catch (err) {
       next(err);
     }
