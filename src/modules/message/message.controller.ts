@@ -9,24 +9,28 @@ import { CONVERSATIONS_PAGE_SIZE, REDIS_ENUM } from '@/utils';
 import { InboxData } from '@/interfaces/inbox.interface';
 import ApiError from '@/exceptions/http.exception';
 import { ConversationRepository } from '@/infra/prisma/repositories/conversation.repository';
-import { ConversationService } from './conversation.service';
+import { MessageRepository } from '@/infra/prisma/repositories/message.repository';
+import { MessageService } from './message.service';
+import { MessageOptions } from '@/interfaces/message.interface';
 
 export class MessageController extends BaseController {
   private readonly logger = LoggerFactory.createLogger(MessageController.name);
-  private readonly conversationService: ConversationService;
+  private readonly messageService: MessageService;
 
-  constructor(
-    private readonly redisService: RedisService,
-    private readonly conversationRepository: ConversationRepository,
-  ) {
+  constructor(private readonly messageRepository: MessageRepository) {
     super();
-    this.conversationService = new ConversationService(redisService, conversationRepository);
-    this.logger.info('Conversation Controller initialized');
+    this.messageService = new MessageService(messageRepository);
+    this.logger.info('Message Controller initialized');
   }
 
-  public getMessageDetailsById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  public getMessageById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {} = req.query;
+      const { messageId } = req.params;
+      const query = req.query as MessageOptions;
+
+      const message = await this.messageService.getMessageById(messageId, { ...query });
+      console.table(query);
+      this.send(res, { ...message }, 'checking the get Message by id');
     } catch (err) {
       next(err);
     }

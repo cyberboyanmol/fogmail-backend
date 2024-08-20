@@ -13,7 +13,7 @@ import { inboxConversationDto } from './dtos/inbox-conversation.dto';
 export class InboxRoute implements Route {
   public readonly path = '/inbox';
   public readonly router: Router;
-  private readonly logger = LoggerFactory.createLogger('InboxRouter');
+  private readonly logger = LoggerFactory.createLogger(InboxRoute.name);
   private readonly inboxController: InboxController;
   constructor() {
     this.router = Router();

@@ -4,8 +4,9 @@ import { HealthCheckRoute } from './modules/healthcheck/healthcheck.route';
 import LoggerFactory from './lib/new-logger';
 import { InboxRoute } from './modules/inbox/inbox.route';
 import { ConversationRoute } from './modules/conversation/conversation.route';
+import { MessageRoute } from './modules/message/message.route';
 
-const app = new App([new HealthCheckRoute(), new InboxRoute(), new ConversationRoute()]);
+const app = new App([new HealthCheckRoute(), new InboxRoute(), new ConversationRoute(), new MessageRoute()]);
 let server: any;
 const logger = LoggerFactory.createLogger();
 async function startServer() {

@@ -48,6 +48,7 @@ export class ConversationRepository {
         id: true,
         messages: {
           select: {
+            id: true,
             fromAddress: {
               select: {
                 name: true,

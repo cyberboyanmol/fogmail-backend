@@ -13,7 +13,7 @@ export class ConversationRoute implements Route {
   public readonly path = '/conversations';
   public readonly router: Router;
   private readonly conversationController: ConversationController;
-  private readonly logger = LoggerFactory.createLogger('ConversationRouter');
+  private readonly logger = LoggerFactory.createLogger(ConversationRoute.name);
   constructor() {
     this.router = Router();
     this.conversationController = this.createConversationController();

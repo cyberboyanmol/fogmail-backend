@@ -5,7 +5,7 @@ export const messageByIdDto = {
     messageId: Joi.string().required().uuid(),
   },
   query: {
-    rawMail: Joi.boolean().optional(),
-    headers: Joi.boolean().optional(),
+    rawMail: Joi.boolean().default(false),
+    headers: Joi.boolean().default(false),
   },
 };
