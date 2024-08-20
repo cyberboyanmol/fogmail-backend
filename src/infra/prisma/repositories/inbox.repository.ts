@@ -6,21 +6,21 @@ export class InboxRepository {
     this.prisma = prisma;
   }
 
-  async find(data: Partial<Conversation>) {
-    return this.prisma.emailInbox.findMany({
-      where: { username: data.emailusername },
-      select: {
-        conversations: {
-          select: {
-            subject: true,
-            messages: {
-              select: {
-                fromAddress: true,
-              },
-            },
-          },
-        },
-      },
-    });
-  }
+  // async find(data: Partial<Conversation>) {
+  //   return this.prisma.inbox.findMany({
+  //     where: { username: data.username },
+  //     select: {
+  //       conversations: {
+  //         select: {
+  //           subject: true,
+  //           messages: {
+  //             select: {
+  //               fromAddress: true,
+  //             },
+  //           },
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
 }

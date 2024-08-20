@@ -1,6 +1,6 @@
 import { username } from '@/helpers/validate/custom.validation';
 import Joi from 'joi';
-export const conversationDto = {
+export const inboxConversationDto = {
   params: {
     username: Joi.string().required().custom(username),
   },
