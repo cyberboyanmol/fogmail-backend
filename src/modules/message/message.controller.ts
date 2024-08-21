@@ -26,11 +26,12 @@ export class MessageController extends BaseController {
   public getMessageById: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { messageId } = req.params;
-      const query = req.query as MessageOptions;
+      let query = req.query as MessageOptions;
+      const validQuery = Object.fromEntries(Object.entries(query).filter(([key, value]) => value === true));
 
-      const message = await this.messageService.getMessageById(messageId, { ...query });
-      console.table(query);
-      this.send(res, { ...message }, 'checking the get Message by id');
+      const message = await this.messageService.getMessageById(messageId, { ...validQuery });
+      console.log(message?.html);
+      this.send(res, { ...message }, 'get Message by id');
     } catch (err) {
       next(err);
     }

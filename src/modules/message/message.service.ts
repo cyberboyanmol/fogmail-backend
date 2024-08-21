@@ -16,6 +16,10 @@ export class MessageService {
   constructor(private readonly messageRepository: MessageRepository) {}
 
   public async getMessageById(messageId: string, options: MessageOptions) {
-    return await this.messageRepository.findById({ id: messageId }, options);
+    const message = await this.messageRepository.findById({ id: messageId }, options);
+    if (!message) {
+      throw new ApiError(HttpStatusCode.NOT_FOUND, 'Message not found');
+    }
+    return message;
   }
 }

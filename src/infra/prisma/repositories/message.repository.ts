@@ -8,13 +8,16 @@ export class MessageRepository {
   }
 
   async findById(data: Partial<Message>, options: MessageOptions) {
-    return this.prisma.message.findUnique({
+    const query: any = {
       where: {
         id: data.id,
       },
-      select: {
-        ...options,
-      },
-    });
+    };
+
+    if (Object.entries(options).length) {
+      query.select = options;
+    }
+
+    return this.prisma.message.findUnique(query);
   }
 }
