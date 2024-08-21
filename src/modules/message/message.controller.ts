@@ -30,7 +30,6 @@ export class MessageController extends BaseController {
       const validQuery = Object.fromEntries(Object.entries(query).filter(([key, value]) => value === true));
 
       const message = await this.messageService.getMessageById(messageId, { ...validQuery });
-      console.log(message?.html);
       this.send(res, { ...message }, 'get Message by id');
     } catch (err) {
       next(err);
